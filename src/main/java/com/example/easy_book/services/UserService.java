@@ -1,7 +1,7 @@
 package com.example.easy_book.services;
 
 import com.example.easy_book.common.Validation;
-import com.example.easy_book.utils.RegisterRequest;
+import com.example.easy_book.utils.RegisterUserRequest;
 import com.example.easy_book.entities.User;
 import com.example.easy_book.repositories.UserRepository;
 import org.slf4j.Logger;
@@ -28,15 +28,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public void registerUser(RegisterRequest request) {
+    public void registerUser(RegisterUserRequest request, String roleUser) {
         validation.checkIfUsernameExists(request.getUsername());
         validation.checkIfEmailExists(request.getEmail());
         request.setPassword(passwordEncoder.encode(request.getPassword()));
-        User user = implementUserDetails(request);
+        User user = implementUserDetails(request, roleUser);
         userRepository.save(user);
     }
 
-    private User implementUserDetails(RegisterRequest request) {
+    private User implementUserDetails(RegisterUserRequest request, String roleUser) {
         User user = new User();
 
         user.setFirstName(request.getFirstName());
@@ -45,7 +45,7 @@ public class UserService {
         user.setEmail(request.getEmail());
         user.setPassword(request.getPassword());
         user.setEnabled(true);
-        user.setRoles("ROLE_USER");
+        user.setRoles(roleUser);
 
         return user;
     }
@@ -59,5 +59,4 @@ public class UserService {
         }
         return userRepository.findByUsername(principalUsername).orElseThrow();
     }
-
 }

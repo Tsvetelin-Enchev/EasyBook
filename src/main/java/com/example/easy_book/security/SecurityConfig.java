@@ -26,10 +26,10 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**", "/api/v1/register", "/api/v1/login"))
+                .csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**", "/api/v1/****"))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/h2-console/**").permitAll()
-                        .requestMatchers("/api/v1/login", "/api/v1/register").permitAll()
+                        .requestMatchers("/api/v1/user/login", "/api/v1/user/register", "/api/v1/user/register/hotelier").permitAll()
                         .anyRequest().authenticated()
                 )
                 .userDetailsService(myUserDetailsService)
